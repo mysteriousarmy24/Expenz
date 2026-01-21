@@ -1,3 +1,4 @@
+import 'package:expenz/Screens/onboard_screens.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -9,10 +10,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: "ExpenZ",
       theme: ThemeData(
         fontFamily: "Inter"
       ),
+      home: OnboardScreens(),
     );
   }
 }
