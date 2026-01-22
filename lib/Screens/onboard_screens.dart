@@ -1,5 +1,6 @@
 import 'package:expenz/Screens/onboardings/page_1.dart';
 import 'package:expenz/Screens/onboardings/shared_onboarding_widget.dart';
+import 'package:expenz/Screens/user_data_screen.dart';
 import 'package:expenz/data/onboard_data.dart';
 import 'package:expenz/utilities/colors.dart';
 import 'package:expenz/widgets/custom_button.dart';
@@ -14,10 +15,12 @@ class OnboardScreens extends StatefulWidget {
 }
 
 class _OnboardScreensState extends State<OnboardScreens> {
+  bool isPageLoaded = false;
   @override
   Widget build(BuildContext context) {
     final PageController _contraller = PageController();
     final onboardData = OnboardData();
+
     return Scaffold(
       body: SafeArea(
         child: Column(
@@ -27,6 +30,13 @@ class _OnboardScreensState extends State<OnboardScreens> {
                 children: [
                   PageView(
                     controller: _contraller,
+                    onPageChanged: (index) {
+                      setState(() {
+                        isPageLoaded = index == 3;
+                        print(isPageLoaded);
+                      });
+                    },
+
                     children: [
                       //page-01
                       Page1(),
@@ -70,16 +80,34 @@ class _OnboardScreensState extends State<OnboardScreens> {
                     left: 0,
                     right: 0,
                     bottom: 30,
-                    child: GestureDetector(
-                      onTap: () {
-                        _contraller.animateToPage(_contraller.page!.toInt()+1, 
-                        duration: Duration(milliseconds: 400), curve: Curves.easeInOutCubic);
-                      },
-                      child: CustomButton(
-                        bgColor: kMainColor, 
-                        name: "Next"
-                        ),
-                        ),
+                    child: !isPageLoaded
+                        ? GestureDetector(
+                            onTap: () {
+                              _contraller.animateToPage(
+                                _contraller.page!.toInt() + 1,
+                                duration: Duration(milliseconds: 400),
+                                curve: Curves.easeInOutCubic,
+                              );
+                            },
+                            child: CustomButton(
+                              bgColor: kMainColor,
+                              name: isPageLoaded ? "Get Started" : "Next",
+                            ),
+                          )
+                        : GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => UserDataScreen(),
+                                ),
+                              );
+                            },
+                            child: CustomButton(
+                              bgColor: kMainColor,
+                              name: isPageLoaded ? "Get Started" : "Next",
+                            ),
+                          ),
                   ),
                 ],
               ),
