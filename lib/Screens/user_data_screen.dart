@@ -1,3 +1,5 @@
+import 'package:expenz/Screens/main_screen.dart';
+import 'package:expenz/Screens/onboardings/user_services.dart';
 import 'package:expenz/utilities/colors.dart';
 import 'package:expenz/utilities/constants.dart';
 import 'package:expenz/widgets/custom_button.dart';
@@ -19,7 +21,7 @@ class _UserDataScreenState extends State<UserDataScreen> {
   final TextEditingController _passwordControllar = TextEditingController();
   final TextEditingController _comfirmPasswordControllar =
       TextEditingController();
-      @override
+  @override
   void dispose() {
     // TODO: implement dispose
     _userNameControllar.dispose();
@@ -28,8 +30,7 @@ class _UserDataScreenState extends State<UserDataScreen> {
     _comfirmPasswordControllar.dispose();
     super.dispose();
   }
-      
-  
+
   bool _rememberMe = false;
   @override
   Widget build(BuildContext context) {
@@ -54,17 +55,13 @@ class _UserDataScreenState extends State<UserDataScreen> {
                     children: [
                       //input userName
                       TextFormField(
-                
-                        
                         controller: _userNameControllar,
                         validator: (value) {
-                          if(value!.isEmpty){
+                          if (value!.isEmpty) {
                             return "Please enter your Name";
                           }
-                          
                         },
                         decoration: InputDecoration(
-                        
                           hintText: "Name",
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(15),
@@ -77,10 +74,9 @@ class _UserDataScreenState extends State<UserDataScreen> {
                       TextFormField(
                         controller: _emailControllar,
                         validator: (value) {
-                          if(value!.isEmpty){
+                          if (value!.isEmpty) {
                             return "Please enter your Email";
                           }
-                          
                         },
 
                         decoration: InputDecoration(
@@ -95,10 +91,9 @@ class _UserDataScreenState extends State<UserDataScreen> {
                       //input password
                       TextFormField(
                         validator: (value) {
-                          if(value!.isEmpty){
+                          if (value!.isEmpty) {
                             return "Please enter your Password";
                           }
-                          
                         },
                         controller: _passwordControllar,
 
@@ -117,10 +112,9 @@ class _UserDataScreenState extends State<UserDataScreen> {
                         controller: _comfirmPasswordControllar,
                         obscureText: true,
                         validator: (value) {
-                          if(value!.isEmpty){
+                          if (value!.isEmpty) {
                             return "Please enter same Confirm Password";
                           }
-                          
                         },
                         decoration: InputDecoration(
                           hintText: "Confirm Password",
@@ -164,13 +158,24 @@ class _UserDataScreenState extends State<UserDataScreen> {
                   right: 0,
                   bottom: 20,
                   child: GestureDetector(
-                    onTap: () {
-                      if(_formKey.currentState!.validate()){
-                        String userName=_userNameControllar.text;
-                        String email=_emailControllar.text;
-                        String password=_passwordControllar.text;
-                        String comfirmPassword=_comfirmPasswordControllar.text;
+                    onTap: () async {
+                      if (_formKey.currentState!.validate()) {
+                        String userName = _userNameControllar.text;
+                        String email = _emailControllar.text;
+                        String password = _passwordControllar.text;
+                        String comfirmPassword =
+                            _comfirmPasswordControllar.text;
+
+                        //data saving
+                        await UserServices.storeUserData(
+                          userName: userName,
+                          email: email,
+                          password: password,
+                          confirmPassword: comfirmPassword,
+                          context: context,
+                        );
                       }
+                      Navigator.push(context, MaterialPageRoute(builder: (context)=> MainScreen()),);
                     },
                     child: CustomButton(bgColor: kMainColor, name: "Next"),
                   ),
