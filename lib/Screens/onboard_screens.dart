@@ -33,7 +33,7 @@ class _OnboardScreensState extends State<OnboardScreens> {
                     onPageChanged: (index) {
                       setState(() {
                         isPageLoaded = index == 3;
-                        print(isPageLoaded);
+                        
                       });
                     },
 

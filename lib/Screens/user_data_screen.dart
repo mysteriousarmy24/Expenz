@@ -175,7 +175,10 @@ class _UserDataScreenState extends State<UserDataScreen> {
                           context: context,
                         );
                       }
-                      Navigator.push(context, MaterialPageRoute(builder: (context)=> MainScreen()),);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => MainScreen()),
+                      );
                     },
                     child: CustomButton(bgColor: kMainColor, name: "Next"),
                   ),
