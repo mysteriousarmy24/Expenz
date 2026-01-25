@@ -19,10 +19,10 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     final List <Widget> screenList = [
-      AddnewScreen(),
+
       HomeScreen(),
       TransitionScreen(),
-      
+      AddnewScreen(),
       BudgetScreen(),
       ProfileScreen()
     ];
