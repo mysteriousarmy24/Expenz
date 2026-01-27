@@ -1,4 +1,4 @@
-import 'package:expenz/Screens/onboardings/user_services.dart';
+import 'package:expenz/services/user_services.dart';
 import 'package:expenz/Screens/user_data_screen.dart';
 import 'package:expenz/utilities/colors.dart';
 import 'package:expenz/utilities/constants.dart';

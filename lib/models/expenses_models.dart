@@ -44,4 +44,31 @@ final class Expense {
     required this.time,
     required this.description,
   });
+
+  //JSON serialization
+  Map <String,dynamic> toJson(){
+    return{
+      "id":id,
+      "title":title,
+      "amount":amount,
+      "description":description,
+      "category":category.index,
+      "date":date.toIso8601String(),
+      "time":time.toIso8601String()
+    };
+  }
+
+  //JSON deserialization
+  factory Expense.fromJSON(Map <String,dynamic> json){
+    return Expense(
+      id: json["id"], 
+      title: json["title"], 
+      amount: json["amount"], 
+      category: ExpenseCategory.values[json['category']], 
+      date: DateTime.parse(json['date']), 
+      time: DateTime.parse(json['time']), 
+      description: json['description']
+      );
+  }
+
 }

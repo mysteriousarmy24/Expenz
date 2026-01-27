@@ -1,5 +1,5 @@
 import 'package:expenz/Screens/onboard_screens.dart';
-import 'package:expenz/Screens/onboardings/user_services.dart';
+import 'package:expenz/services/user_services.dart';
 import 'package:expenz/widgets/wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';

@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 
-enum IncomeCategory { freelance, salary, passive, sales }
+enum IncomeCategory { 
+  freelance, 
+  salary, 
+  passive, 
+  sales 
+}
 
 //category images
 final Map<IncomeCategory, String> incomeCategoryImages = {
@@ -35,4 +40,29 @@ class Income {
     required this.time,
     required this.description,
   });
+  //JSON serialization
+  Map<String,dynamic>toJson(){
+    return{
+      'id':id,
+      'title':title,
+      'amount':amount,
+      'description':description,
+      'category':category.index,
+      'date':date.toIso8601String(),
+      'time':time.toIso8601String(),
+    };
+  }
+  //JSON deserialization
+  factory Income.fromJSON(Map <String,dynamic> data){
+    return Income(
+      id: data['id'], 
+      title: data['title'], 
+      amount: data['amount'], 
+      category: IncomeCategory.values[data['category']], 
+      date: DateTime.parse(data['date']), 
+      time: DateTime.parse(data['time']), 
+      description: data['description']
+      );
+  }
+
 }
