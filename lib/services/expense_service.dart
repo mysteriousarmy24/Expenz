@@ -14,12 +14,12 @@ class ExpenseService {
       //creating an instance
       SharedPreferences prefs = await SharedPreferences.getInstance();
 
-      List<String>? exsitExpenses = prefs.getStringList(_expenseKey);
+      List<String>? existingExpenses = prefs.getStringList(_expenseKey);
 
       //Convert the exsisting expenses to a list of Expenses
       List<Expense> existingExpenseObjects = [];
-      if (exsitExpenses != null) {
-        existingExpenseObjects = exsitExpenses
+      if (existingExpenses != null) {
+        existingExpenseObjects = existingExpenses
             .map((e) => Expense.fromJSON(json.decode(e)))
             .toList();
       }
@@ -29,6 +29,8 @@ class ExpenseService {
       List<String> updatedExpenses = existingExpenseObjects
           .map((e) => json.encode(e.toJson()))
           .toList();
+      // Save the updated list of expenses to shared preferences
+      await prefs.setStringList(_expenseKey, updatedExpenses);
 
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -43,15 +45,55 @@ class ExpenseService {
       }
     }
   }
+
   //load data from shared pref
-  Future <List<Expense>> loadExpense() async{
+  Future<List<Expense>> loadExpense() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
-    List <String>? existingExpenses = pref.getStringList(_expenseKey);
+    List<String>? existingExpenses = pref.getStringList(_expenseKey);
     //converting existing expenses to a list of obj
-    List <Expense> loadedExpenses = [];
-    if(existingExpenses!=null){
-      loadedExpenses = existingExpenses.map((e)=>Expense.fromJSON(json.decode(e))).toList();
+    List<Expense> loadedExpenses = [];
+    if (existingExpenses != null) {
+      loadedExpenses = existingExpenses
+          .map((e) => Expense.fromJSON(json.decode(e)))
+          .toList();
     }
     return loadedExpenses;
+  }
+
+  Future<void> deleteExpenses(int id, BuildContext context) async {
+    try {
+      SharedPreferences pref = await SharedPreferences.getInstance();
+      List<String>? existingExpenses = pref.getStringList(_expenseKey);
+      List<Expense> existingExpensesObj = [];
+      if (existingExpenses != null) {
+        existingExpensesObj = existingExpenses
+            .map((e) => Expense.fromJSON(json.decode(e)))
+            .toList();
+      }
+
+      // Remove the expense with the specified id from the list
+      existingExpensesObj.removeWhere((expense) => expense.id == id);
+
+      // Convert the list of Expense objects back to a list of strings
+      List<String> updatedExpenses = existingExpensesObj
+          .map((e) => json.encode(e.toJson()))
+          .toList();
+
+      // Save the updated list of expenses to shared preferences
+      await pref.setStringList(_expenseKey, updatedExpenses);
+      //show snackbar
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Expense deleted successfully"),
+          duration: Duration(seconds: 2),
+        ),
+      );
+    } catch (error) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text("Error...")));
+      }
+    }
   }
 }

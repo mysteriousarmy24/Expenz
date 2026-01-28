@@ -34,7 +34,7 @@ class _IncomeExpencesWidgetState extends State<IncomeExpencesWidget> {
               children: [
                 Container(
                   height: MediaQuery.of(context).size.height*0.15,
-                  width: MediaQuery.of(context).size.width*0.15,
+                  width: MediaQuery.of(context).size.width*0.14,
                   decoration: BoxDecoration(
                     color: kWhite,
                     borderRadius: BorderRadius.circular(20),
@@ -43,7 +43,7 @@ class _IncomeExpencesWidgetState extends State<IncomeExpencesWidget> {
                       ? Image.asset("assets/images/income.png")
                       : Image.asset("assets/images/expense.png"),
                 ),
-                SizedBox(width: 15,),
+                SizedBox(width: 10,),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [

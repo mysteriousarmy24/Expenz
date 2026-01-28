@@ -11,7 +11,7 @@ enum IncomeCategory {
 final Map<IncomeCategory, String> incomeCategoryImages = {
   IncomeCategory.freelance: "assets/images/freelance.png",
   IncomeCategory.passive: "assets/images/passive.png",
-  IncomeCategory.salary: "assets/mages/salary.png",
+  IncomeCategory.salary: "assets/images/salary.png",
   IncomeCategory.sales: "assets/images/sales.png",
 };
 //category colors
@@ -53,15 +53,15 @@ class Income {
     };
   }
   //JSON deserialization
-  factory Income.fromJSON(Map <String,dynamic> data){
+  factory Income.fromJSON(Map <String,dynamic> json){
     return Income(
-      id: data['id'], 
-      title: data['title'], 
-      amount: data['amount'], 
-      category: IncomeCategory.values[data['category']], 
-      date: DateTime.parse(data['date']), 
-      time: DateTime.parse(data['time']), 
-      description: data['description']
+      id: json['id'], 
+      title: json['title'], 
+      amount: json['amount'], 
+      category: IncomeCategory.values[json['category']], 
+      date: DateTime.parse(json['date']), 
+      time: DateTime.parse(json['time']), 
+      description: json['description']
       );
   }
 

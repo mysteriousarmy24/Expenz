@@ -1,6 +1,7 @@
 import 'package:expenz/models/expenses_models.dart';
 import 'package:expenz/models/income_category_model.dart';
 import 'package:expenz/services/expense_service.dart';
+import 'package:expenz/services/income_services.dart';
 import 'package:expenz/utilities/colors.dart';
 import 'package:expenz/utilities/constants.dart';
 import 'package:expenz/widgets/custom_button.dart';
@@ -9,7 +10,8 @@ import 'package:intl/intl.dart';
 
 class AddnewScreen extends StatefulWidget {
   final Function(Expense) addExpense;
-  const AddnewScreen({super.key, required this.addExpense});
+  final Function(Income) addIncome;
+  const AddnewScreen({super.key, required this.addExpense, required this.addIncome});
 
   @override
   State<AddnewScreen> createState() => _AddnewScreenState();
@@ -69,7 +71,7 @@ class _AddnewScreenState extends State<AddnewScreen> {
                           ),
                           child: Padding(
                             padding: const EdgeInsets.symmetric(
-                              horizontal: 60,
+                              horizontal: 54,
                               vertical: 15,
                             ),
                             child: Text(
@@ -99,7 +101,7 @@ class _AddnewScreenState extends State<AddnewScreen> {
                           ),
                           child: Padding(
                             padding: const EdgeInsets.symmetric(
-                              horizontal: 60,
+                              horizontal: 54,
                               vertical: 15,
                             ),
                             child: Text(
@@ -391,7 +393,8 @@ class _AddnewScreenState extends State<AddnewScreen> {
                         SizedBox(height: 10),
                         GestureDetector(
                           onTap: () async {
-                            //methode to save expenses as shared pref
+                            if(_selectedMethod==0){
+                              //methode to save expenses as shared pref
                             List <Expense> loadedExpenses = await ExpenseService().loadExpense();
                             //create expense to store
                             Expense expense = Expense(
@@ -405,6 +408,34 @@ class _AddnewScreenState extends State<AddnewScreen> {
                               );
                               //add expense
                               widget.addExpense(expense);
+
+                              //clear the feilds
+                              _amountController.clear();
+                              _descriptionController.clear();
+                              _titleController.clear();
+
+                            }else{
+                              //methode to save expenses as shared pref
+                            List <Income> loadedIncomes = await IncomeServices().loadIncome();
+                            //create income to store
+                            Income income = Income(
+                              id: loadedIncomes.length+1, 
+                              title: _titleController.text, 
+                              amount: _amountController.text.isEmpty ?0 :double.parse(_amountController.text), 
+                              category:_incomeCategory , 
+                              date: _selectedDate, 
+                              time: _selectedTime, 
+                              description: _descriptionController.text
+                              );
+                              //add expense
+                              widget.addIncome(income);
+
+                              //clear the feilds
+                              _amountController.clear();
+                              _descriptionController.clear();
+                              _titleController.clear();
+                            }
+                            
 
                           },
                           child: CustomButton(

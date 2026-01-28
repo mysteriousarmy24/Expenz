@@ -1,3 +1,4 @@
+import 'package:expenz/Screens/main_screen.dart';
 import 'package:expenz/services/user_services.dart';
 import 'package:expenz/Screens/user_data_screen.dart';
 import 'package:expenz/utilities/colors.dart';
@@ -6,7 +7,7 @@ import 'package:expenz/widgets/income_expences_widget.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  const HomeScreen({super.key, });
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();

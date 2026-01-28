@@ -4,7 +4,9 @@ import 'package:expenz/Screens/home_screen.dart';
 import 'package:expenz/Screens/profile_screen.dart';
 import 'package:expenz/Screens/transition_screen.dart';
 import 'package:expenz/models/expenses_models.dart';
+import 'package:expenz/models/income_category_model.dart';
 import 'package:expenz/services/expense_service.dart';
+import 'package:expenz/services/income_services.dart';
 import 'package:expenz/utilities/colors.dart';
 
 import 'package:flutter/material.dart';
@@ -27,13 +29,23 @@ class _MainScreenState extends State<MainScreen> {
       expenseList =loadedExpenses;
     });
   }
+  List <Income> incomeList=[];
 
+  void fetchAllIncomes() async{
+    List<Income>loadIncomes=await IncomeServices().loadIncome();
+    setState(() {
+      incomeList=loadIncomes;
+    });
+  }
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     setState(() {
       fetchAllExpenses();
+});
+    setState(() {
+      fetchAllIncomes();
 });
   }
   //add new expense
@@ -45,14 +57,36 @@ class _MainScreenState extends State<MainScreen> {
       expenseList.add(newExpense);
     });
   }
+  //add new income
+  void addNewIncomes(Income newIncome){
+    IncomeServices().saveIncomes(newIncome, context);
+
+    //update the list of incomes
+    setState(() {
+      incomeList.add(newIncome);
+    });
+  }
+  void removeExpense(Expense expense){
+    ExpenseService().deleteExpenses(expense.id, context);
+    setState(() {
+      expenseList.remove(expense);
+    });
+  }
   
   @override
   Widget build(BuildContext context) {
     final List <Widget> screenList = [
+      TransitionScreen(
+        
+        incomesList: incomeList,
+        addDissmiss:removeExpense ,
+        expensesList: expenseList,
+      ),
 
       HomeScreen(),
-      TransitionScreen(),
+      
       AddnewScreen(
+        addIncome:addNewIncomes ,
         addExpense: addNewExpenses,
       ),
       BudgetScreen(),
