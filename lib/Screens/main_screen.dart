@@ -72,19 +72,28 @@ class _MainScreenState extends State<MainScreen> {
       expenseList.remove(expense);
     });
   }
+  void deleteIncome(Income income){
+    IncomeServices().removeIncome(income.id, context);
+    setState(() {
+      incomeList.remove(income);
+    });
+  }
   
   @override
   Widget build(BuildContext context) {
     final List <Widget> screenList = [
-      TransitionScreen(
-        
+      
+
+      HomeScreen(
         incomesList: incomeList,
-        addDissmiss:removeExpense ,
         expensesList: expenseList,
       ),
-
-      HomeScreen(),
-      
+      TransitionScreen(
+        addDissmissIncome: deleteIncome,
+        incomesList: incomeList,
+        addDissmissExpense:removeExpense ,
+        expensesList: expenseList,
+      ),
       AddnewScreen(
         addIncome:addNewIncomes ,
         addExpense: addNewExpenses,

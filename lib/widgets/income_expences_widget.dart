@@ -23,7 +23,7 @@ class _IncomeExpencesWidgetState extends State<IncomeExpencesWidget> {
       children: [
         Container(
           
-          height: MediaQuery.of(context).size.height * 0.1,
+          height: MediaQuery.of(context).size.width * 0.25,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(28),
             color: widget.isIncome ? kGreen : kRed,
@@ -33,8 +33,8 @@ class _IncomeExpencesWidgetState extends State<IncomeExpencesWidget> {
             child: Row(
               children: [
                 Container(
-                  height: MediaQuery.of(context).size.height*0.15,
-                  width: MediaQuery.of(context).size.width*0.14,
+                  height: MediaQuery.of(context).size.height*0.09,
+                  //width: MediaQuery.of(context).size.width*0.14,
                   decoration: BoxDecoration(
                     color: kWhite,
                     borderRadius: BorderRadius.circular(20),
