@@ -11,7 +11,11 @@ import 'package:intl/intl.dart';
 class AddnewScreen extends StatefulWidget {
   final Function(Expense) addExpense;
   final Function(Income) addIncome;
-  const AddnewScreen({super.key, required this.addExpense, required this.addIncome});
+  const AddnewScreen({
+    super.key,
+    required this.addExpense,
+    required this.addIncome,
+  });
 
   @override
   State<AddnewScreen> createState() => _AddnewScreenState();
@@ -52,6 +56,12 @@ class _AddnewScreenState extends State<AddnewScreen> {
                   height: MediaQuery.of(context).size.height * 0.07,
                   width: double.infinity,
                   decoration: BoxDecoration(
+                    boxShadow: [
+                      BoxShadow(
+                        blurRadius: 10,
+                        color: Colors.black.withOpacity(0.3),
+                      ),
+                    ],
                     color: kWhite,
                     borderRadius: BorderRadius.circular(100),
                   ),
@@ -302,7 +312,7 @@ class _AddnewScreenState extends State<AddnewScreen> {
                                         style: TextStyle(
                                           color: kWhite,
                                           fontSize: 15,
-                                          fontWeight: FontWeight.bold
+                                          fontWeight: FontWeight.bold,
                                         ),
                                       ),
                                     ],
@@ -370,7 +380,7 @@ class _AddnewScreenState extends State<AddnewScreen> {
                                         style: TextStyle(
                                           color: kWhite,
                                           fontSize: 15,
-                                          fontWeight: FontWeight.bold
+                                          fontWeight: FontWeight.bold,
                                         ),
                                       ),
                                     ],
@@ -393,18 +403,21 @@ class _AddnewScreenState extends State<AddnewScreen> {
                         SizedBox(height: 10),
                         GestureDetector(
                           onTap: () async {
-                            if(_selectedMethod==0){
+                            if (_selectedMethod == 0) {
                               //methode to save expenses as shared pref
-                            List <Expense> loadedExpenses = await ExpenseService().loadExpense();
-                            //create expense to store
-                            Expense expense = Expense(
-                              id: loadedExpenses.length+1, 
-                              title: _titleController.text, 
-                              amount: _amountController.text.isEmpty ?0 :double.parse(_amountController.text), 
-                              category:_expenseCategory , 
-                              date: _selectedDate, 
-                              time: _selectedTime, 
-                              description: _descriptionController.text
+                              List<Expense> loadedExpenses =
+                                  await ExpenseService().loadExpense();
+                              //create expense to store
+                              Expense expense = Expense(
+                                id: loadedExpenses.length + 1,
+                                title: _titleController.text,
+                                amount: _amountController.text.isEmpty
+                                    ? 0
+                                    : double.parse(_amountController.text),
+                                category: _expenseCategory,
+                                date: _selectedDate,
+                                time: _selectedTime,
+                                description: _descriptionController.text,
                               );
                               //add expense
                               widget.addExpense(expense);
@@ -413,19 +426,21 @@ class _AddnewScreenState extends State<AddnewScreen> {
                               _amountController.clear();
                               _descriptionController.clear();
                               _titleController.clear();
-
-                            }else{
+                            } else {
                               //methode to save expenses as shared pref
-                            List <Income> loadedIncomes = await IncomeServices().loadIncome();
-                            //create income to store
-                            Income income = Income(
-                              id: loadedIncomes.length+1, 
-                              title: _titleController.text, 
-                              amount: _amountController.text.isEmpty ?0 :double.parse(_amountController.text), 
-                              category:_incomeCategory , 
-                              date: _selectedDate, 
-                              time: _selectedTime, 
-                              description: _descriptionController.text
+                              List<Income> loadedIncomes =
+                                  await IncomeServices().loadIncome();
+                              //create income to store
+                              Income income = Income(
+                                id: loadedIncomes.length + 1,
+                                title: _titleController.text,
+                                amount: _amountController.text.isEmpty
+                                    ? 0
+                                    : double.parse(_amountController.text),
+                                category: _incomeCategory,
+                                date: _selectedDate,
+                                time: _selectedTime,
+                                description: _descriptionController.text,
                               );
                               //add expense
                               widget.addIncome(income);
@@ -435,8 +450,6 @@ class _AddnewScreenState extends State<AddnewScreen> {
                               _descriptionController.clear();
                               _titleController.clear();
                             }
-                            
-
                           },
                           child: CustomButton(
                             bgColor: _selectedMethod == 1 ? kGreen : kRed,

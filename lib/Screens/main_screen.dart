@@ -78,10 +78,45 @@ class _MainScreenState extends State<MainScreen> {
       incomeList.remove(income);
     });
   }
+  Map<ExpenseCategory,double>calculateExpenseTotal(){
+    Map<ExpenseCategory,double>expenseCategoryTot={
+      ExpenseCategory.food:0,
+      ExpenseCategory.transport:0,
+      ExpenseCategory.health:0,
+      ExpenseCategory.shopping:0,
+      ExpenseCategory.subscription:0,
+      
+    };
+      for(Expense expense in expenseList){
+        expenseCategoryTot[expense.category] =expenseCategoryTot[expense.category]! + expense.amount  ;
+
+
+      }
+      return expenseCategoryTot;
+
+    
+  }
+  Map<IncomeCategory,double>calculateIncomesTotal(){
+    Map<IncomeCategory,double>incomeCategoryTot={
+      IncomeCategory.freelance:0,
+      IncomeCategory.passive:0,
+      IncomeCategory.sales:0,
+      IncomeCategory.salary:0,
   
+    };
+      for(Income income in incomeList){
+        incomeCategoryTot[income.category] =incomeCategoryTot[income.category]! + income.amount  ;
+
+
+      }
+      return incomeCategoryTot;
+
+    
+  }
   @override
   Widget build(BuildContext context) {
     final List <Widget> screenList = [
+      
       
 
       HomeScreen(
@@ -98,7 +133,11 @@ class _MainScreenState extends State<MainScreen> {
         addIncome:addNewIncomes ,
         addExpense: addNewExpenses,
       ),
-      BudgetScreen(),
+      BudgetScreen(
+        expensesTotal:calculateExpenseTotal() ,
+        incomesTotal: calculateIncomesTotal(),
+      ),
+      
       ProfileScreen()
     ];
     return Scaffold(

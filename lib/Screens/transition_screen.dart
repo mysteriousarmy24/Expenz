@@ -103,7 +103,6 @@ class _TransitionScreenState extends State<TransitionScreen> {
                           ),
                         )
                       : 
-
               SizedBox(
                 height: MediaQuery.of(context).size.height * 0.3,
                 child: SingleChildScrollView(
