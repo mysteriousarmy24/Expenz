@@ -2,6 +2,7 @@ import 'package:expenz/Screens/main_screen.dart';
 import 'package:expenz/models/expenses_models.dart';
 import 'package:expenz/models/income_category_model.dart';
 import 'package:expenz/services/user_services.dart';
+import 'package:expenz/services/monthly_archive_service.dart';
 import 'package:expenz/Screens/user_data_screen.dart';
 import 'package:expenz/utilities/colors.dart';
 import 'package:expenz/utilities/constants.dart';
@@ -25,16 +26,68 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   String username = "";
+  List<double> monthlyExpenses = List<double>.filled(12, 0.0);
+  bool isArchiveDue = false;
+
   @override
   void initState() {
-    UserServices.getUserData().then((value) {
-      if (value["username"] != null) {
+    super.initState();
+    _loadUserData();
+    _checkAndArchiveMonthly();
+  }
+
+  Future<void> _loadUserData() async {
+    try {
+      // Load monthly expenses
+      final expenses = await UserServices.getMonthlyExpenses();
+      if (expenses != null) {
         setState(() {
-          username = value["username"]!;
+          monthlyExpenses = expenses;
         });
       }
-    });
-    super.initState();
+
+      // Load username
+      final userData = await UserServices.getUserData();
+      if (userData["username"] != null) {
+        setState(() {
+          username = userData["username"]!;
+        });
+      }
+    } catch (err) {
+      print('Error loading user data: $err');
+    }
+  }
+
+  Future<void> _checkAndArchiveMonthly() async {
+    try {
+      final archiveService = MonthlyArchiveService();
+      final isDue = await archiveService.isMonthlyArchiveDue();
+
+      if (isDue) {
+        // Show notification
+        setState(() {
+          isArchiveDue = true;
+        });
+
+        // Perform archive
+        await archiveService.archiveMonthlyExpenses();
+        await archiveService.markArchiveComplete();
+
+        // Reload monthly data
+        await _loadUserData();
+
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Monthly archive completed! Chart updated.'),
+              duration: Duration(seconds: 3),
+            ),
+          );
+        }
+      }
+    } catch (err) {
+      print('Error checking archive: $err');
+    }
   }
 
   @override
@@ -79,9 +132,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         SizedBox(width: 30),
                         Expanded(
                           child: Text(
-                            "Welcome! $username",
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
+                            "Welcome!\n$username",
+                            
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 20,
@@ -130,7 +182,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
                   ),
                   SizedBox(height: 15),
-                  LineChartSample(),
+                  LineChartSample(monthlyExpenses: monthlyExpenses),
                   SizedBox(height: 15),
                   Text(
                     "Recent Transaction",

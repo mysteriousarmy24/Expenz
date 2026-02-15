@@ -7,7 +7,10 @@ import 'package:expenz/models/expenses_models.dart';
 import 'package:expenz/models/income_category_model.dart';
 import 'package:expenz/services/expense_service.dart';
 import 'package:expenz/services/income_services.dart';
+import 'package:expenz/services/transaction_simulator.dart';
+import 'package:expenz/services/user_services.dart';
 import 'package:expenz/utilities/colors.dart';
+import 'package:expenz/main.dart';
 
 import 'package:flutter/material.dart';
 
@@ -20,6 +23,9 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   int _curruntIndex=0;
+  double? _preFillAmount;
+  String? _preFillType;
+  double _totalBalance = 0.0;
 
   List <Expense> expenseList =[];
 
@@ -37,46 +43,100 @@ class _MainScreenState extends State<MainScreen> {
       incomeList=loadIncomes;
     });
   }
+  
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     setState(() {
       fetchAllExpenses();
-});
+    });
     setState(() {
       fetchAllIncomes();
-});
+    });
+
+    // Load totalBalance
+    UserServices.getTotalBalance().then((balance) {
+      setState(() {
+        _totalBalance = balance;
+      });
+    });
+    
+    // Set up notification tap handler
+    setNotificationNavigationCallback((payload) {
+      _handleNotificationTap(payload);
+    });
+  }
+  
+  void _handleNotificationTap(String? payload) {
+    if (payload != null) {
+      try {
+        final data = TransactionSimulator.parsePayload(payload);
+        final amount = data['amount'] as double;
+        final type = data['type'] as String;
+        
+        setState(() {
+          _preFillAmount = amount;
+          _preFillType = type;
+          _curruntIndex = 2; // Index of AddnewScreen
+        });
+        
+        // Show confirmation message
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Detected: LKR ${amount.toStringAsFixed(2)} $type'),
+            duration: Duration(seconds: 2),
+          ),
+        );
+      } catch (err) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error processing notification: ${err.toString()}'),
+          ),
+        );
+      }
+    }
   }
   //add new expense
   void addNewExpenses(Expense newExpense){
     ExpenseService().saveExpenses(newExpense, context);
 
-    //update the list of expenses
+    //update the list of expenses and balance
     setState(() {
       expenseList.add(newExpense);
+      _totalBalance -= newExpense.amount;
     });
+    // Update balance in SharedPreferences
+    UserServices.updateTotalBalance(_totalBalance);
   }
   //add new income
   void addNewIncomes(Income newIncome){
     IncomeServices().saveIncomes(newIncome, context);
 
-    //update the list of incomes
+    //update the list of incomes and balance
     setState(() {
       incomeList.add(newIncome);
+      _totalBalance += newIncome.amount;
     });
+    // Update balance in SharedPreferences
+    UserServices.updateTotalBalance(_totalBalance);
   }
   void removeExpense(Expense expense){
     ExpenseService().deleteExpenses(expense.id, context);
     setState(() {
       expenseList.remove(expense);
+      _totalBalance += expense.amount;
     });
+    // Update balance in SharedPreferences
+    UserServices.updateTotalBalance(_totalBalance);
   }
   void deleteIncome(Income income){
     IncomeServices().removeIncome(income.id, context);
     setState(() {
       incomeList.remove(income);
+      _totalBalance -= income.amount;
     });
+    // Update balance in SharedPreferences
+    UserServices.updateTotalBalance(_totalBalance);
   }
   Map<ExpenseCategory,double>calculateExpenseTotal(){
     Map<ExpenseCategory,double>expenseCategoryTot={
@@ -96,6 +156,15 @@ class _MainScreenState extends State<MainScreen> {
 
     
   }
+
+  double calculateTotalExpenseAmount() {
+    double total = 0.0;
+    for (Expense expense in expenseList) {
+      total += expense.amount;
+    }
+    return total;
+  }
+
   Map<IncomeCategory,double>calculateIncomesTotal(){
     Map<IncomeCategory,double>incomeCategoryTot={
       IncomeCategory.freelance:0,
@@ -133,12 +202,17 @@ class _MainScreenState extends State<MainScreen> {
       AddnewScreen(
         addIncome:addNewIncomes ,
         addExpense: addNewExpenses,
+        preFillAmount: _preFillAmount,
+        preFillType: _preFillType,
       ),
       BudgetScreen(
         expensesTotal:calculateExpenseTotal() ,
         incomesTotal: calculateIncomesTotal(),
       ),
-      ProfileScreen(),
+      ProfileScreen(
+        expensesList: expenseList,
+        totalBalance: _totalBalance,
+      ),
       
       
     ];

@@ -11,10 +11,15 @@ import 'package:intl/intl.dart';
 class AddnewScreen extends StatefulWidget {
   final Function(Expense) addExpense;
   final Function(Income) addIncome;
+  final double? preFillAmount;
+  final String? preFillType; // "Expense" or "Income"
+
   const AddnewScreen({
     super.key,
     required this.addExpense,
     required this.addIncome,
+    this.preFillAmount,
+    this.preFillType,
   });
 
   @override
@@ -34,6 +39,18 @@ class _AddnewScreenState extends State<AddnewScreen> {
   TextEditingController _amountController = TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
+
+  @override
+  void initState() {
+    super.initState();
+    // Initialize with pre-filled data if provided
+    if (widget.preFillAmount != null) {
+      _amountController.text = widget.preFillAmount.toString();
+    }
+    if (widget.preFillType != null) {
+      _selectedMethod = widget.preFillType == "Expense" ? 0 : 1;
+    }
+  }
 
   @override
   void dispose() {

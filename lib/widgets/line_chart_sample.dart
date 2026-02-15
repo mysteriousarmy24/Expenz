@@ -3,17 +3,21 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
 class LineChartSample extends StatefulWidget {
-  const LineChartSample({super.key});
+  final List<double>? monthlyExpenses;
+  const LineChartSample({super.key, this.monthlyExpenses});
 
   @override
   State<LineChartSample> createState() => _LineChartSampleState();
 }
 
 class _LineChartSampleState extends State<LineChartSample> {
-  List<Color> gradientColors = [kMainColor, kMainColor.withOpacity(0.5)];
+  late final List<Color> gradientColors = [kMainColor, kMainColor.withValues(alpha: 0.5)];
 
   @override
   Widget build(BuildContext context) {
+    // Use provided data or default values
+    final monthlyData = widget.monthlyExpenses ?? List<double>.filled(12, 0.0);
+
     return Stack(
       children: <Widget>[
         AspectRatio(
@@ -25,7 +29,7 @@ class _LineChartSampleState extends State<LineChartSample> {
               top: 12,
               bottom: 12,
             ),
-            child: LineChart(mainData()),
+            child: LineChart(mainData(monthlyData)),
           ),
         ),
       ],
@@ -81,7 +85,29 @@ class _LineChartSampleState extends State<LineChartSample> {
     return Text(text, style: style, textAlign: TextAlign.left);
   }
 
-  LineChartData mainData() {
+  LineChartData mainData(List<double> monthlyExpenses) {
+    // Convert monthly expenses to FlSpot data
+    List<FlSpot> spots = [];
+    for (int i = 0; i < monthlyExpenses.length; i++) {
+      // Scale the data to fit the chart (dividing by 10000 for better visualization)
+      final scaledValue = monthlyExpenses[i] / 10000;
+      spots.add(FlSpot(i.toDouble(), scaledValue.clamp(0, 6)));
+    }
+
+    // If no data, use default spots
+    if (spots.isEmpty ||
+        spots.every((spot) => spot.y == 0)) {
+      spots = const [
+        FlSpot(0, 3),
+        FlSpot(2.6, 2),
+        FlSpot(4.9, 5),
+        FlSpot(6.8, 3.1),
+        FlSpot(8, 4),
+        FlSpot(9.5, 3),
+        FlSpot(11, 4),
+      ];
+    }
+
     return LineChartData(
       titlesData: FlTitlesData(
         show: true,
@@ -113,24 +139,15 @@ class _LineChartSampleState extends State<LineChartSample> {
       maxY: 6,
       lineBarsData: [
         LineChartBarData(
-          spots: const [
-            FlSpot(0, 3),
-            FlSpot(2.6, 2),
-            FlSpot(4.9, 5),
-            FlSpot(6.8, 3.1),
-            FlSpot(8, 4),
-            FlSpot(9.5, 3),
-            FlSpot(11, 4),
-          ],
+          spots: spots,
           isCurved: true,
           gradient: LinearGradient(colors: gradientColors),
           barWidth: 5,
           isStrokeCapRound: false,
           dotData: const FlDotData(show: false),
-          
           belowBarData: BarAreaData(
             gradient: LinearGradient(
-              colors: [kMainColor.withOpacity(0.9),Colors.white],
+              colors: [kMainColor.withValues(alpha: 0.9), Colors.white],
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
             ),
