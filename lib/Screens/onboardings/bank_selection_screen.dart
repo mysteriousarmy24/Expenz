@@ -17,18 +17,18 @@ class BankSelectionScreen extends StatefulWidget {
 class _BankSelectionScreenState extends State<BankSelectionScreen> {
   String? selectedBank;
 
-  // List of popular banks
+  // List of Sri Lankan banks
   final List<Map<String, String>> bankList = [
-    {'name': 'State Bank of India', 'icon': '🏦'},
-    {'name': 'HDFC Bank', 'icon': '🏧'},
-    {'name': 'ICICI Bank', 'icon': '💳'},
-    {'name': 'Axis Bank', 'icon': '🪙'},
-    {'name': 'Kotak Mahindra Bank', 'icon': '💰'},
-    {'name': 'IndusInd Bank', 'icon': '🏛'},
-    {'name': 'Yes Bank', 'icon': '✅'},
-    {'name': 'Bank of Baroda', 'icon': '🏪'},
-    {'name': 'Punjab National Bank', 'icon': '🏢'},
-    {'name': 'Canon Bank', 'icon': '🏛️'},
+    {'name': 'Commercial Bank of Ceylon', 'icon': '🏦'},
+    {'name': 'Sampath Bank', 'icon': '🏧'},
+    {'name': 'Peoples Bank', 'icon': '💳'},
+    {'name': 'Bank of Ceylon', 'icon': '🪙'},
+    {'name': 'DFCC Bank', 'icon': '💰'},
+    {'name': 'Colombo Commercial Bank', 'icon': '🏛'},
+    {'name': 'Amana Bank', 'icon': '✅'},
+    {'name': 'Seylan Bank', 'icon': '🏪'},
+    {'name': 'National Savings Bank', 'icon': '🏢'},
+    {'name': 'Pan Asia Bank', 'icon': '🏛️'},
     {'name': 'Other Bank', 'icon': '📍'},
     {'name': 'Digital Wallet', 'icon': '📱'},
   ];

@@ -1,4 +1,5 @@
 import 'package:expenz/utilities/colors.dart';
+import 'package:expenz/utilities/number_formatter.dart';
 import 'package:flutter/material.dart';
 
 class CategoryChartCard extends StatefulWidget {
@@ -68,7 +69,7 @@ class _CategoryChartCardState extends State<CategoryChartCard> {
                           fontSize: 12,fontWeight: FontWeight.w600,color: kGrey.withOpacity(0.8)
                         ),),
                 Spacer(),
-                Text("LKR${widget.amount}",style: TextStyle(
+                Text("LKR ${formatCurrencyAmount(widget.amount)}",style: TextStyle(
                   color:widget.isExpense? kRed:kGreen,
                   fontSize: 16
                 ),)

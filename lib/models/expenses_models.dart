@@ -6,6 +6,7 @@ enum ExpenseCategory {
   health,
   shopping,
   subscription,
+  others,
 }
 
 //category images
@@ -15,6 +16,7 @@ final Map<ExpenseCategory, String> expenseCategoryImages = {
   ExpenseCategory.health: "assets/images/health.png",
   ExpenseCategory.shopping: "assets/images/bag.png",
   ExpenseCategory.subscription: "assets/images/bill.png",
+  ExpenseCategory.others: "assets/images/bill.png",
 };
 
 //category colors
@@ -24,6 +26,7 @@ final Map<ExpenseCategory, Color> expenseCategoryColors = {
   ExpenseCategory.health: const Color(0xFF64B5F6),
   ExpenseCategory.shopping: const Color(0xFFFFD54F),
   ExpenseCategory.subscription: const Color(0xFF9575CD),
+  ExpenseCategory.others: const Color(0xFFFFB366),
 };
 
 final class Expense {

@@ -145,6 +145,7 @@ class _MainScreenState extends State<MainScreen> {
       ExpenseCategory.health:0,
       ExpenseCategory.shopping:0,
       ExpenseCategory.subscription:0,
+      ExpenseCategory.others:0,
       
     };
       for(Expense expense in expenseList){
@@ -171,6 +172,7 @@ class _MainScreenState extends State<MainScreen> {
       IncomeCategory.passive:0,
       IncomeCategory.sales:0,
       IncomeCategory.salary:0,
+      IncomeCategory.others:0,
   
     };
       for(Income income in incomeList){

@@ -1,6 +1,7 @@
 import 'package:expenz/models/expenses_models.dart';
 import 'package:expenz/models/income_category_model.dart';
 import 'package:expenz/utilities/colors.dart';
+import 'package:expenz/utilities/number_formatter.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -54,9 +55,16 @@ class IncomeCard extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Image.asset(
-                    incomeCategoryImages[category]!,
+                    incomeCategoryImages[category] ?? "assets/images/income.png",
                     width: 20,
                     height: 20,
+                    errorBuilder: (context, error, stackTrace) {
+                      return Icon(
+                        Icons.attach_money,
+                        size: 20,
+                        color: incomeCategoryColors[category],
+                      );
+                    },
                   ),
                 ),
               ),
@@ -91,7 +99,7 @@ class IncomeCard extends StatelessWidget {
                   SizedBox(
                     width: 150,
                     child: Text(
-                      "+ LKR${amount.toStringAsFixed(2)}",
+                      "+ LKR${formatCurrencyAmount(amount)}",
                       style: const TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.bold,

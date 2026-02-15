@@ -4,6 +4,7 @@ import 'package:expenz/services/expense_service.dart';
 import 'package:expenz/services/income_services.dart';
 import 'package:expenz/services/user_services.dart';
 import 'package:expenz/utilities/colors.dart';
+import 'package:expenz/utilities/number_formatter.dart';
 import 'package:expenz/widgets/profile_card.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
@@ -245,7 +246,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               const SizedBox(width: 10),
                               Expanded(
                                 child: Text(
-                                  "LKR ${totalBalance.toStringAsFixed(2)}",
+                                  "LKR ${formatCurrencyAmount(totalBalance)}",
                                   style: const TextStyle(
                                     color: Colors.white,
                                     fontSize: 28,
@@ -352,7 +353,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           ),
                                         ),
                                         Text(
-                                          "LKR ${totalExpenses.toStringAsFixed(2)}",
+                                          "LKR ${formatCurrencyAmount(totalExpenses)}",
                                           style: const TextStyle(
                                             fontSize: 11,
                                             fontWeight: FontWeight.bold,
@@ -382,7 +383,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           ),
                                         ),
                                         Text(
-                                          "LKR ${(totalBalance - totalExpenses).toStringAsFixed(2)}",
+                                          "LKR ${formatCurrencyAmount(totalBalance - totalExpenses)}",
                                           style: const TextStyle(
                                             fontSize: 11,
                                             fontWeight: FontWeight.bold,
@@ -424,7 +425,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   ),
                                   const SizedBox(height: 5),
                                   Text(
-                                    "LKR ${totalBalance.toStringAsFixed(2)}",
+                                  "LKR ${formatCurrencyAmount(totalBalance)}",
                                     style: TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.bold,

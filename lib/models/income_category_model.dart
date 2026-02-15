@@ -4,7 +4,8 @@ enum IncomeCategory {
   freelance, 
   salary, 
   passive, 
-  sales 
+  sales,
+  others,
 }
 
 //category images
@@ -13,6 +14,7 @@ final Map<IncomeCategory, String> incomeCategoryImages = {
   IncomeCategory.passive: "assets/images/passive.png",
   IncomeCategory.salary: "assets/images/salary.png",
   IncomeCategory.sales: "assets/images/sales.png",
+  IncomeCategory.others: "assets/images/income.png",
 };
 //category colors
 final Map<IncomeCategory, Color> incomeCategoryColors = {
@@ -20,6 +22,7 @@ final Map<IncomeCategory, Color> incomeCategoryColors = {
   IncomeCategory.passive: const Color(0xFF81C784),
   IncomeCategory.sales: const Color(0xFF64B5F6),
   IncomeCategory.salary: const Color(0xFFFFD54F),
+  IncomeCategory.others: const Color(0xFFFFB366),
 };
 
 class Income {

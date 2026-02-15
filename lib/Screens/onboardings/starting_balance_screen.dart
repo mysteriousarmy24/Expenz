@@ -116,7 +116,7 @@ class _StartingBalanceScreenState extends State<StartingBalanceScreen> {
                 keyboardType: const TextInputType.numberWithOptions(decimal: true),
                 decoration: InputDecoration(
                   hintText: "Enter amount (e.g., 50000)",
-                  prefixIcon: const Icon(Icons.currency_rupee),
+                  
                   prefixText: "LKR ",
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),

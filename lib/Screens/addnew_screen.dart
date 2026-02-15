@@ -4,6 +4,7 @@ import 'package:expenz/services/expense_service.dart';
 import 'package:expenz/services/income_services.dart';
 import 'package:expenz/utilities/colors.dart';
 import 'package:expenz/utilities/constants.dart';
+import 'package:expenz/utilities/number_formatter.dart';
 import 'package:expenz/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -168,21 +169,47 @@ class _AddnewScreenState extends State<AddnewScreen> {
                           fontSize: 20,
                         ),
                       ),
-                      TextField(
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 60,
-                          color: kWhite,
-                        ),
-                        decoration: InputDecoration(
-                          hintText: "0",
-                          border: InputBorder.none,
-                          hintStyle: TextStyle(
-                            fontSize: 60,
-                            fontWeight: FontWeight.bold,
-                            color: kWhite,
+                      Stack(
+                        children: [
+                          // Hidden TextField for input
+                          TextField(
+                            keyboardType: TextInputType.number,
+                            controller: _amountController,
+                            onChanged: (value) {
+                              setState(() {});
+                            },
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 60,
+                              color: Colors.transparent,
+                            ),
+                            decoration: InputDecoration(
+                              hintText: "0",
+                              border: InputBorder.none,
+                              hintStyle: TextStyle(
+                                fontSize: 60,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.transparent,
+                              ),
+                            ),
                           ),
-                        ),
+                          // Formatted display text
+                          Padding(
+                            padding: const EdgeInsets.only(top: 8.0),
+                            child: Text(
+                              _amountController.text.isEmpty
+                                  ? "0.00"
+                                  : formatCurrencyAmount(
+                                      double.tryParse(_amountController.text) ??
+                                          0.0),
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 60,
+                                color: kWhite,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
@@ -284,30 +311,6 @@ class _AddnewScreenState extends State<AddnewScreen> {
                           ),
                         ),
                         SizedBox(height: 15),
-                        TextFormField(
-                          validator: (value) {
-                            if (value!.isEmpty) {
-                              return "please enter a valid number...";
-                            }
-                            double amount = double.parse(value);
-                            if (amount == null || amount <= 0) {
-                              return "please enter a valid number...";
-                            }
-                          },
-                          controller: _amountController,
-                          keyboardType: TextInputType.number,
-                          decoration: InputDecoration(
-                            hint: Text("Amount"),
-                            contentPadding: EdgeInsets.symmetric(
-                              vertical: 10,
-                              horizontal: 20,
-                            ),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(100),
-                            ),
-                          ),
-                        ),
-                        SizedBox(height: 20),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -442,6 +445,29 @@ class _AddnewScreenState extends State<AddnewScreen> {
                         SizedBox(height: 10),
                         GestureDetector(
                           onTap: () async {
+                            // Validate amount
+                            if (_amountController.text.isEmpty) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text("Please enter an amount")),
+                              );
+                              return;
+                            }
+                            
+                            try {
+                              double amount = double.parse(_amountController.text);
+                              if (amount <= 0) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(content: Text("Please enter a valid amount greater than 0")),
+                                );
+                                return;
+                              }
+                            } catch (e) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text("Please enter a valid number")),
+                              );
+                              return;
+                            }
+
                             if (_formKey.currentState!.validate()) {
                               if (_selectedMethod == 0) {
                                 //methode to save expenses as shared pref

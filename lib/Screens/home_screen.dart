@@ -6,6 +6,7 @@ import 'package:expenz/services/monthly_archive_service.dart';
 import 'package:expenz/Screens/user_data_screen.dart';
 import 'package:expenz/utilities/colors.dart';
 import 'package:expenz/utilities/constants.dart';
+import 'package:expenz/utilities/number_formatter.dart';
 import 'package:expenz/widgets/expenses_card.dart';
 import 'package:expenz/widgets/income_expences_widget.dart';
 import 'package:expenz/widgets/line_chart_sample.dart';
@@ -158,12 +159,12 @@ class _HomeScreenState extends State<HomeScreen> {
                         IncomeExpencesWidget(
                           isIncome: true,
                           value:
-                              "LKR\n${widget.incomesList.fold(0.0, (sum, item) => sum + item.amount)}",
+                              "LKR\n${formatCurrencyAmount(widget.incomesList.fold(0.0, (sum, item) => sum + item.amount))}",
                         ),
                         IncomeExpencesWidget(
                           isIncome: false,
                           value:
-                              "LKR\n${widget.expensesList.fold(0.0, (sum, item) => sum + item.amount)}",
+                              "LKR\n${formatCurrencyAmount(widget.expensesList.fold(0.0, (sum, item) => sum + item.amount))}",
                         ),
                       ],
                     ),

@@ -1,6 +1,7 @@
 import 'package:expenz/models/expenses_models.dart';
 import 'package:expenz/models/income_category_model.dart';
 import 'package:expenz/utilities/colors.dart';
+import 'package:expenz/utilities/number_formatter.dart';
 import 'package:fl_chart/fl_chart.dart';
 
 import 'package:flutter/material.dart';
@@ -55,6 +56,12 @@ class _ChartState extends State<Chart> {
           showTitle: false,
           value: widget.expenseTotal[ExpenseCategory.health]??0
         ),
+        PieChartSectionData(
+          color: expenseCategoryColors[ExpenseCategory.others],
+          radius: 60,
+          showTitle: false,
+          value: widget.expenseTotal[ExpenseCategory.others]??0
+        ),
       ];
     }else{
       return[
@@ -77,6 +84,12 @@ class _ChartState extends State<Chart> {
         ),PieChartSectionData(
           color: incomeCategoryColors[IncomeCategory.sales],
           value: widget.incomeTotal[IncomeCategory.sales]??0,
+          radius: 60,
+          showTitle: false
+        ),
+        PieChartSectionData(
+          color: incomeCategoryColors[IncomeCategory.others],
+          value: widget.incomeTotal[IncomeCategory.others]??0,
           radius: 60,
           showTitle: false
         ),
@@ -112,13 +125,13 @@ class _ChartState extends State<Chart> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               widget.isIncome? Center(
-                child: Text("LKR\n${widget.expenseTotal.values.fold(0.0, (sum, item) => sum + item)}",style: TextStyle(
+                child: Text("LKR\n${formatCurrencyAmount(widget.expenseTotal.values.fold(0.0, (sum, item) => sum + item))}",style: TextStyle(
                   fontSize: 25,
                   fontWeight: FontWeight.bold
                 ),),
               )
               :Center(
-                child: Text("LKR\n${widget.incomeTotal.values.fold(0.0, (sum, item) => sum + item)}",style: TextStyle(
+                child: Text("LKR\n${formatCurrencyAmount(widget.incomeTotal.values.fold(0.0, (sum, item) => sum + item))}",style: TextStyle(
                   fontSize: 25,
                   fontWeight: FontWeight.bold
                 ),),
