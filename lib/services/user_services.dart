@@ -55,4 +55,10 @@ class UserServices {
     String? email = prefs.getString("email");
     return {"username":userName!,"email":email!};
   }
+  Future <void> removeDetails()async{
+    SharedPreferences prefs =await SharedPreferences.getInstance();
+    prefs.remove("username");
+    prefs.remove("password");
+    prefs.remove("email");
+  }
 }

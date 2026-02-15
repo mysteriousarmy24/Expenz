@@ -96,4 +96,23 @@ class ExpenseService {
       }
     }
   }
+
+  //deleting when logout
+  Future <void> deleAllExpenses(BuildContext contex)async{
+    try{
+      SharedPreferences pref = await SharedPreferences.getInstance();
+      await pref.remove(_expenseKey);
+
+      if(contex.mounted){
+        ScaffoldMessenger.of(contex).showSnackBar(
+          SnackBar(content: Text("All expenses Deleted"))
+        );
+      }
+    }catch(err){
+      ScaffoldMessenger.of(contex).showSnackBar(
+          SnackBar(content: Text("erro"))
+        );
+
+    }
+  }
 }

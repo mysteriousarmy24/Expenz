@@ -90,7 +90,7 @@ class ExpenceCard extends StatelessWidget {
                   Text(
                     "- LKR${amount.toStringAsFixed(2)}",
                     style: const TextStyle(
-                      fontSize: 18,
+                      fontSize: 15,
                       fontWeight: FontWeight.bold,
                       color: kRed,
                     ),

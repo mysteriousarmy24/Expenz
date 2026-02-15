@@ -65,23 +65,27 @@ class _HomeScreenState extends State<HomeScreen> {
                           decoration: BoxDecoration(
                             color: kWhite,
                             borderRadius: BorderRadius.circular(100),
-                            border: Border.all(color: kMainColor, width: 5),
+                            border: Border.all(color: kMainColor.withOpacity(0.2), width: 5),
                           ),
                           child: ClipRRect(
                             borderRadius: BorderRadiusGeometry.circular(100),
                             child: Image.asset(
-                              "assets/images/user.jpg",
+                              "assets/images/person.png",
                               fit: BoxFit.cover,
                               width: 60,
                             ),
                           ),
                         ),
                         SizedBox(width: 30),
-                        Text(
-                          "Welcome $username",
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20,
+                        Expanded(
+                          child: Text(
+                            "Welcome! $username",
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20,
+                            ),
                           ),
                         ),
                         Spacer(),

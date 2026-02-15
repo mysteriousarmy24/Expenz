@@ -2,7 +2,7 @@ import 'package:expenz/models/expenses_models.dart';
 import 'package:expenz/models/income_category_model.dart';
 import 'package:expenz/utilities/colors.dart';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:flutter/foundation.dart';
+
 import 'package:flutter/material.dart';
 
 class Chart extends StatefulWidget {
@@ -18,6 +18,11 @@ class Chart extends StatefulWidget {
 class _ChartState extends State<Chart> {
   //sectiondata
   List<PieChartSectionData>getChartSection(){
+
+    
+
+    
+
     if(widget.isIncome){
       return[
         PieChartSectionData(
@@ -87,7 +92,7 @@ class _ChartState extends State<Chart> {
       startDegreeOffset: -90,
       borderData: FlBorderData(show: false)
     );
-    return Container(
+    return (widget.isIncome &&widget.incomeTotal.isEmpty)||(!widget.isIncome &&widget.expenseTotal.isEmpty)?Center(child: Text("Plaese add Expenses/incomes..."),): Container(
       width: 250,
       height: 250,
       decoration: BoxDecoration(
@@ -97,20 +102,23 @@ class _ChartState extends State<Chart> {
       child: Stack(
         alignment: Alignment.center,
         children: [
-          PieChart(
-            pieChartData
+          Padding(
+            padding: const EdgeInsets.all(15),
+            child: PieChart(
+              pieChartData
+            ),
           ),
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               widget.isIncome? Center(
-                child: Text("LKR3000",style: TextStyle(
+                child: Text("LKR\n${widget.expenseTotal.values.fold(0.0, (sum, item) => sum + item)}",style: TextStyle(
                   fontSize: 25,
                   fontWeight: FontWeight.bold
                 ),),
               )
               :Center(
-                child: Text("LKR5000",style: TextStyle(
+                child: Text("LKR\n${widget.incomeTotal.values.fold(0.0, (sum, item) => sum + item)}",style: TextStyle(
                   fontSize: 25,
                   fontWeight: FontWeight.bold
                 ),),
@@ -123,3 +131,4 @@ class _ChartState extends State<Chart> {
     );
   }
 }
+//values.fold(0.0, (sum,element)=>sum+element)

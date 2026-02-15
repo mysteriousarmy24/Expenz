@@ -1,8 +1,11 @@
-import 'package:expenz/Screens/main_screen.dart';
+import 'package:expenz/screens/main_screen.dart';
+import 'package:expenz/services/user_services.dart';
 import 'package:expenz/services/user_services.dart';
 import 'package:expenz/utilities/colors.dart';
 import 'package:expenz/utilities/constants.dart';
+
 import 'package:expenz/widgets/custom_button.dart';
+
 import 'package:flutter/material.dart';
 
 class UserDataScreen extends StatefulWidget {
@@ -13,52 +16,49 @@ class UserDataScreen extends StatefulWidget {
 }
 
 class _UserDataScreenState extends State<UserDataScreen> {
-  //key
+  //form Key for the form validations
   final _formKey = GlobalKey<FormState>();
-  //contrallers
-  final TextEditingController _userNameControllar = TextEditingController();
-  final TextEditingController _emailControllar = TextEditingController();
-  final TextEditingController _passwordControllar = TextEditingController();
-  final TextEditingController _comfirmPasswordControllar =
+
+  //controllers for save the states in the inputs
+  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordContorller = TextEditingController();
+  final TextEditingController _confirmPasswordContorller =
       TextEditingController();
-  @override
-  void dispose() {
-    // TODO: implement dispose
-    _userNameControllar.dispose();
-    _emailControllar.dispose();
-    _passwordControllar.dispose();
-    _comfirmPasswordControllar.dispose();
-    super.dispose();
-  }
 
   bool _rememberMe = false;
+
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(),
-        body: SingleChildScrollView(
+    return Scaffold(
+      body: SingleChildScrollView(
+        child: SafeArea(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
+            padding: const EdgeInsets.all(kDefalutPadding),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  "Enter your\nPersonal Details",
-                  style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
+                const Text(
+                  "Enter your \nPersonal Details",
+                  style: TextStyle(
+                    fontSize: 25,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
-                SizedBox(height: 30),
-                //forms
+                const SizedBox(
+                  height: 30,
+                ),
                 Form(
                   key: _formKey,
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      //input userName
                       TextFormField(
-                        controller: _userNameControllar,
+                        controller: _usernameController,
                         validator: (value) {
+                          //check weather the username is entered
                           if (value!.isEmpty) {
-                            return "Please enter your Name";
+                            return "Please Enter Your Name";
                           }
                         },
                         decoration: InputDecoration(
@@ -66,54 +66,64 @@ class _UserDataScreenState extends State<UserDataScreen> {
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(15),
                           ),
-                          contentPadding: EdgeInsets.all(kDefalutPadding),
+                          contentPadding: const EdgeInsets.symmetric(
+                            vertical: 15,
+                            horizontal: 20,
+                          ),
                         ),
                       ),
-                      SizedBox(height: 15),
-                      //input email
+                      const SizedBox(
+                        height: 15,
+                      ),
                       TextFormField(
-                        controller: _emailControllar,
+                        controller: _emailController,
                         validator: (value) {
                           if (value!.isEmpty) {
-                            return "Please enter your Email";
+                            return "Please Enter Your Email";
                           }
                         },
-
                         decoration: InputDecoration(
                           hintText: "Email",
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(15),
                           ),
-                          contentPadding: EdgeInsets.all(kDefalutPadding),
+                          contentPadding: const EdgeInsets.symmetric(
+                            vertical: 15,
+                            horizontal: 20,
+                          ),
                         ),
                       ),
-                      SizedBox(height: 15),
-                      //input password
+                      const SizedBox(
+                        height: 15,
+                      ),
                       TextFormField(
+                        controller: _passwordContorller,
+                        obscureText: true,
                         validator: (value) {
                           if (value!.isEmpty) {
-                            return "Please enter your Password";
+                            return "Please Enter A Valid Password";
                           }
                         },
-                        controller: _passwordControllar,
-
-                        obscureText: true,
                         decoration: InputDecoration(
                           hintText: "Password",
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(15),
                           ),
-                          contentPadding: EdgeInsets.all(kDefalutPadding),
+                          contentPadding: const EdgeInsets.symmetric(
+                            vertical: 15,
+                            horizontal: 20,
+                          ),
                         ),
                       ),
-                      SizedBox(height: 15),
-                      //input Comformpassword
+                      const SizedBox(
+                        height: 15,
+                      ),
                       TextFormField(
-                        controller: _comfirmPasswordControllar,
+                        controller: _confirmPasswordContorller,
                         obscureText: true,
                         validator: (value) {
                           if (value!.isEmpty) {
-                            return "Please enter same Confirm Password";
+                            return "Please Enter A Valid Password";
                           }
                         },
                         decoration: InputDecoration(
@@ -121,20 +131,25 @@ class _UserDataScreenState extends State<UserDataScreen> {
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(15),
                           ),
-                          contentPadding: EdgeInsets.all(kDefalutPadding),
+                          contentPadding: const EdgeInsets.symmetric(
+                            vertical: 15,
+                            horizontal: 20,
+                          ),
                         ),
                       ),
-                      SizedBox(height: 30),
-
+                      const SizedBox(
+                        height: 30,
+                      ),
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
-                          Text(
-                            "Remember me for next time",
-                            style: TextStyle(color: kGrey, fontSize: 15),
+                          const Text(
+                            "Remember Me for the next time",
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                              color: kGrey,
+                            ),
                           ),
-                          SizedBox(width: 30),
-                          //check box
                           Expanded(
                             child: CheckboxListTile(
                               activeColor: kMainColor,
@@ -145,42 +160,45 @@ class _UserDataScreenState extends State<UserDataScreen> {
                                 });
                               },
                             ),
-                          ),
+                          )
                         ],
                       ),
+                      const SizedBox(
+                        height: 30,
+                      ),
+                      GestureDetector(
+                        onTap: () async {
+                          if (_formKey.currentState!.validate()) {
+                            // Form is valid, process data
+                            String username = _usernameController.text;
+                            String email = _emailController.text;
+                            String password = _passwordContorller.text;
+                            String confirmPassword =
+                                _confirmPasswordContorller.text;
+                            //store the user details in shared preferences
+                            await UserServices.storeUserData(
+                              userName: username,
+                              email: email,
+                              password: password,
+                              confirmPassword: confirmPassword,
+                              context: context,
+                                );
+
+                            //Navigate to the Home screen
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const MainScreen(),
+                              ),
+                            );
+                          }
+                        },
+                        child: const CustomButton(
+                          name: "Next",
+                          bgColor: kMainColor,
+                        ),
+                      ),
                     ],
-                  ),
-                ),
-                SizedBox(height: 30),
-
-                Positioned(
-                  left: 0,
-                  right: 0,
-                  bottom: 20,
-                  child: GestureDetector(
-                    onTap: () async {
-                      if (_formKey.currentState!.validate()) {
-                        String userName = _userNameControllar.text;
-                        String email = _emailControllar.text;
-                        String password = _passwordControllar.text;
-                        String comfirmPassword =
-                            _comfirmPasswordControllar.text;
-
-                        //data saving
-                        await UserServices.storeUserData(
-                          userName: userName,
-                          email: email,
-                          password: password,
-                          confirmPassword: comfirmPassword,
-                          context: context,
-                        );
-                      }
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => MainScreen()),
-                      );
-                    },
-                    child: CustomButton(bgColor: kMainColor, name: "Next"),
                   ),
                 ),
               ],

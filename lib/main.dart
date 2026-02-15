@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
           bool hasUserName= snapshot.data??false;
           return MaterialApp(
             debugShowCheckedModeBanner: false,
-            title: "ExpenZ",
+            title: "Expenz",
             theme: ThemeData(
               fontFamily: "Inter"
             ),

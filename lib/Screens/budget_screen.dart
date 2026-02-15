@@ -113,7 +113,7 @@ class _BudgetScreenState extends State<BudgetScreen> {
                             ),
                             child: Padding(
                               padding: const EdgeInsets.symmetric(
-                                horizontal: 40,
+                                horizontal: 33,
                                 vertical: 15,
                               ),
                               child: Text(

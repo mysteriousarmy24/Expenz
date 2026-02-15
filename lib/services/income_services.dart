@@ -94,4 +94,23 @@ class IncomeServices {
       }
     }
   }
+
+   //deleting when logout
+  Future <void> deleAllIncomes(BuildContext contex)async{
+    try{
+      SharedPreferences pref = await SharedPreferences.getInstance();
+      await pref.remove(_incomeKey);
+
+      if(contex.mounted){
+        ScaffoldMessenger.of(contex).showSnackBar(
+          SnackBar(content: Text("All incomes Deleted"))
+        );
+      }
+    }catch(err){
+      ScaffoldMessenger.of(contex).showSnackBar(
+          SnackBar(content: Text("erro"))
+        );
+
+    }
+  }
 }
