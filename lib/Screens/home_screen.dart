@@ -10,6 +10,7 @@ import 'package:expenz/utilities/number_formatter.dart';
 import 'package:expenz/widgets/expenses_card.dart';
 import 'package:expenz/widgets/income_expences_widget.dart';
 import 'package:expenz/widgets/line_chart_sample.dart';
+import 'package:expenz/utilities/responsive.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -95,12 +96,12 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
+        padding: EdgeInsets.only(bottom: context.verticalGap),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             //col with bg color
             Container(
-              height: MediaQuery.of(context).size.height * 0.35,
               decoration: BoxDecoration(
                 color: kMainColor.withOpacity(0.37),
                 borderRadius: BorderRadius.only(
@@ -109,17 +110,20 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
               child: Padding(
-                padding: const EdgeInsets.all(kDefalutPadding),
+                padding: EdgeInsets.all(context.horizontalPadding),
                 child: Column(
                   children: [
-                    SizedBox(height: 40),
+                    SizedBox(height: context.verticalGap),
                     Row(
                       children: [
                         Container(
                           decoration: BoxDecoration(
                             color: kWhite,
                             borderRadius: BorderRadius.circular(100),
-                            border: Border.all(color: kMainColor.withOpacity(0.2), width: 5),
+                            border: Border.all(
+                              color: kMainColor.withOpacity(0.2),
+                              width: 5,
+                            ),
                           ),
                           child: ClipRRect(
                             borderRadius: BorderRadiusGeometry.circular(100),
@@ -130,18 +134,18 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           ),
                         ),
-                        SizedBox(width: 30),
+                        const SizedBox(width: 12),
                         Expanded(
                           child: Text(
                             "Welcome!\n$username",
-                            
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 20,
                             ),
                           ),
                         ),
-                        Spacer(),
                         IconButton(
                           onPressed: () {},
                           icon: Icon(
@@ -152,77 +156,78 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ],
                     ),
-                    SizedBox(height: 30),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        IncomeExpencesWidget(
-                          isIncome: true,
-                          value:
-                              "LKR\n${formatCurrencyAmount(widget.incomesList.fold(0.0, (sum, item) => sum + item.amount))}",
-                        ),
-                        IncomeExpencesWidget(
-                          isIncome: false,
-                          value:
-                              "LKR\n${formatCurrencyAmount(widget.expensesList.fold(0.0, (sum, item) => sum + item.amount))}",
-                        ),
-                      ],
+                    SizedBox(height: context.verticalGap),
+                    LayoutBuilder(
+                      builder: (context, constraints) {
+                        final cardWidth = (constraints.maxWidth - 12) / 2;
+                        return Row(
+                          children: [
+                            SizedBox(
+                              width: cardWidth,
+                              child: IncomeExpencesWidget(
+                                isIncome: true,
+                                value:
+                                    "LKR\n${formatCurrencyAmount(widget.incomesList.fold(0.0, (sum, item) => sum + item.amount))}",
+                              ),
+                            ),
+                            const SizedBox(width: 12),
+                            SizedBox(
+                              width: cardWidth,
+                              child: IncomeExpencesWidget(
+                                isIncome: false,
+                                value:
+                                    "LKR\n${formatCurrencyAmount(widget.expensesList.fold(0.0, (sum, item) => sum + item.amount))}",
+                              ),
+                            ),
+                          ],
+                        );
+                      },
                     ),
                   ],
                 ),
               ),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              padding: EdgeInsets.symmetric(
+                horizontal: context.horizontalPadding,
+              ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(height: 15),
+                  SizedBox(height: context.verticalGap),
                   Text(
                     "Spend frequency",
                     style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
                   ),
-                  SizedBox(height: 15),
+                  SizedBox(height: context.verticalGap),
                   LineChartSample(monthlyExpenses: monthlyExpenses),
-                  SizedBox(height: 15),
+                  SizedBox(height: context.verticalGap),
                   Text(
                     "Recent Transaction",
                     style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
                   ),
-                  SizedBox(height: 15),
+                  SizedBox(height: context.verticalGap),
                   widget.expensesList.isEmpty
                       ? Text(
                           "No expenses yet,please add some expenses...",
-                          style: TextStyle(
-                            color: kGrey,
-                            fontSize: 16
-                          ),
+                          style: TextStyle(color: kGrey, fontSize: 16),
                         )
-                      : SizedBox(
-                          height: MediaQuery.of(context).size.height * 0.3,
-                          child: SingleChildScrollView(
-                            child: Column(
-                              children: [
-                                ListView.builder(
-                                  shrinkWrap: true,
-                                  itemCount: widget.expensesList.length,
-                                  scrollDirection: Axis.vertical,
-                                  physics: NeverScrollableScrollPhysics(),
-                                  itemBuilder: (context, index) {
-                                    final expense = widget.expensesList[index];
-                                    return ExpenceCard(
-                                      title: expense.title,
-                                      description: expense.description,
-                                      amount: expense.amount,
-                                      time: expense.date,
-                                      date: expense.time,
-                                      category: expense.category,
-                                    );
-                                  },
-                                ),
-                              ],
-                            ),
-                          ),
+                      : ListView.builder(
+                          shrinkWrap: true,
+                          primary: false,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount: widget.expensesList.length,
+                          itemBuilder: (context, index) {
+                            final expense = widget.expensesList[index];
+                            return ExpenceCard(
+                              title: expense.title,
+                              description: expense.description,
+                              amount: expense.amount,
+                              time: expense.date,
+                              date: expense.time,
+                              category: expense.category,
+                            );
+                          },
                         ),
                 ],
               ),

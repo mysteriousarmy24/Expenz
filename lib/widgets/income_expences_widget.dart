@@ -1,8 +1,7 @@
 import 'package:expenz/utilities/colors.dart';
-import 'package:expenz/utilities/constants.dart';
 import 'package:flutter/material.dart';
 
-class IncomeExpencesWidget extends StatefulWidget {
+class IncomeExpencesWidget extends StatelessWidget {
   final bool isIncome;
   final String value;
   const IncomeExpencesWidget({
@@ -13,64 +12,55 @@ class IncomeExpencesWidget extends StatefulWidget {
   });
 
   @override
-  State<IncomeExpencesWidget> createState() => _IncomeExpencesWidgetState();
-}
-
-class _IncomeExpencesWidgetState extends State<IncomeExpencesWidget> {
-  @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Container(
-          
-          height: MediaQuery.of(context).size.width * 0.25,
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final compact = constraints.maxWidth < 175;
+        return Container(
+          constraints: const BoxConstraints(minHeight: 100),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(28),
-            color: widget.isIncome ? kGreen : kRed,
+            color: isIncome ? kGreen : kRed,
           ),
           child: Padding(
-            padding: const EdgeInsets.all(kDefalutPadding),
+            padding: EdgeInsets.all(compact ? 12 : 16),
             child: Row(
               children: [
                 Container(
-                  height: MediaQuery.of(context).size.height*0.09,
-                  //width: MediaQuery.of(context).size.width*0.14,
+                  height: compact ? 40 : 48,
+                  width: compact ? 40 : 48,
                   decoration: BoxDecoration(
                     color: kWhite,
-                    borderRadius: BorderRadius.circular(20),
+                    borderRadius: BorderRadius.circular(16),
                   ),
-                  child: widget.isIncome
-                      ? Image.asset("assets/images/income.png")
-                      : Image.asset("assets/images/expense.png"),
+                  child: Padding(
+                    padding: const EdgeInsets.all(6),
+                    child: Image.asset(isIncome ? 'assets/images/income.png' : 'assets/images/expense.png'),
+                  ),
                 ),
-                SizedBox(width: 10,),
-                Column(
+                SizedBox(width: compact ? 8 : 12),
+                Expanded(child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    widget.isIncome
-                        ? Text(
-                            "Income",
-                            style: TextStyle(color: kWhite, fontSize: 15),
-                          )
-                        : Text(
-                            "Expense",
-                            style: TextStyle(color: kWhite, fontSize: 15),
-                          ),
+                    Text(isIncome ? 'Income' : 'Expense', style: const TextStyle(color: kWhite, fontSize: 15)),
                     Text(
-                      widget.value,
-                      style: TextStyle(
+                      value,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
                         color: kWhite,
                         fontWeight: FontWeight.bold,
                         fontSize: 15,
                       ),
                     ),
                   ],
-                ),
+                )),
               ],
             ),
           ),
-        ),
-      ],
+        );
+      },
     );
   }
 }

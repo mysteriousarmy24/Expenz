@@ -48,21 +48,15 @@ class _TransitionScreenState extends State<TransitionScreen> {
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
               SizedBox(height: 20),
-              widget.expensesList.isEmpty
+              Expanded(child: widget.expensesList.isEmpty
                   ? Text(
                       "No expenses yet,please add some expenses...",
                       style: TextStyle(color: kGrey, fontSize: 16),
                     )
-                  : SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.3,
-                      child: SingleChildScrollView(
-                        child: Column(
-                          children: [
-                            ListView.builder(
-                              shrinkWrap: true,
+                  : ListView.builder(
                               itemCount: widget.expensesList.length,
                               scrollDirection: Axis.vertical,
-                              physics: NeverScrollableScrollPhysics(),
+                              physics: const BouncingScrollPhysics(),
                               itemBuilder: (context, index) {
                                 final expense = widget.expensesList[index];
                                 return Dismissible(
@@ -83,18 +77,14 @@ class _TransitionScreenState extends State<TransitionScreen> {
                                   ),
                                 );
                               },
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
+                            )),
               SizedBox(height: 20),
               Text(
                 'Incomes',
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
               SizedBox(height: 20),
-               widget.incomesList.isEmpty
+               Expanded(child: widget.incomesList.isEmpty
                       ? Text(
                           "No incomes yet,please add some incomes...",
                           style: TextStyle(
@@ -102,18 +92,10 @@ class _TransitionScreenState extends State<TransitionScreen> {
                             fontSize: 16
                           ),
                         )
-                      : 
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.3,
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      //incomes
-                      ListView.builder(
-                        shrinkWrap: true,
+                      : ListView.builder(
                         itemCount: widget.incomesList.length,
                         scrollDirection: Axis.vertical,
-                        physics: NeverScrollableScrollPhysics(),
+                        physics: const BouncingScrollPhysics(),
                         itemBuilder: (context, index) {
                           final income = widget.incomesList[index];
                           return Dismissible(
@@ -134,11 +116,7 @@ class _TransitionScreenState extends State<TransitionScreen> {
                             ),
                           );
                         },
-                      ),
-                    ],
-                  ),
-                ),
-              ),
+                      )),
             ],
           ),
         ),

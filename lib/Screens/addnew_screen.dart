@@ -201,7 +201,8 @@ class _AddnewScreenState extends State<AddnewScreen> {
                                   ? "0.00"
                                   : formatCurrencyAmount(
                                       double.tryParse(_amountController.text) ??
-                                          0.0),
+                                          0.0,
+                                    ),
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 60,
@@ -217,7 +218,6 @@ class _AddnewScreenState extends State<AddnewScreen> {
               ),
               //form
               Container(
-                height: MediaQuery.of(context).size.height * 0.65,
                 width: double.infinity,
                 margin: EdgeInsets.only(
                   top: MediaQuery.of(context).size.height * 0.3,
@@ -230,7 +230,12 @@ class _AddnewScreenState extends State<AddnewScreen> {
                   ),
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.all(20),
+                  padding: EdgeInsets.fromLTRB(
+                    20,
+                    20,
+                    20,
+                    MediaQuery.viewInsetsOf(context).bottom + 20,
+                  ),
                   child: Form(
                     key: _formKey,
                     child: Column(
@@ -293,11 +298,11 @@ class _AddnewScreenState extends State<AddnewScreen> {
                         //description
                         SizedBox(height: 15),
                         TextFormField(
-                          validator: (value) {
-                            if (value!.isEmpty) {
-                              return "please enter a discription";
-                            }
-                          },
+                          // validator: (value) {
+                          //   if (value!.isEmpty) {
+                          //     return "please enter a discription";
+                          //   }
+                          // },
                           controller: _descriptionController,
                           decoration: InputDecoration(
                             hint: Text("Description"),
@@ -448,22 +453,32 @@ class _AddnewScreenState extends State<AddnewScreen> {
                             // Validate amount
                             if (_amountController.text.isEmpty) {
                               ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(content: Text("Please enter an amount")),
+                                SnackBar(
+                                  content: Text("Please enter an amount"),
+                                ),
                               );
                               return;
                             }
-                            
+
                             try {
-                              double amount = double.parse(_amountController.text);
+                              double amount = double.parse(
+                                _amountController.text,
+                              );
                               if (amount <= 0) {
                                 ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(content: Text("Please enter a valid amount greater than 0")),
+                                  SnackBar(
+                                    content: Text(
+                                      "Please enter a valid amount greater than 0",
+                                    ),
+                                  ),
                                 );
                                 return;
                               }
                             } catch (e) {
                               ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(content: Text("Please enter a valid number")),
+                                SnackBar(
+                                  content: Text("Please enter a valid number"),
+                                ),
                               );
                               return;
                             }

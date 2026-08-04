@@ -28,7 +28,7 @@ class IncomeCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.only(bottom: 20),
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(10),
@@ -41,9 +41,9 @@ class IncomeCard extends StatelessWidget {
           ),
         ],
       ),
-      child: Column(
-        children: [
-          Row(
+      child: LayoutBuilder(builder: (context, constraints) {
+        final isNarrow = constraints.maxWidth < 320;
+        return Row(
             children: [
               Container(
                 height: 50,
@@ -71,11 +71,13 @@ class IncomeCard extends StatelessWidget {
               const SizedBox(
                 width: 10,
               ),
-              Column(
+              Expanded(child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     title,
+                    maxLines: isNarrow ? 1 : 2,
+                    overflow: TextOverflow.ellipsis,
                     style: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w500,
@@ -91,15 +93,17 @@ class IncomeCard extends StatelessWidget {
                     ),
                   ),
                 ],
-              ),
-              const Spacer(),
+              )),
+              const SizedBox(width: 8),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  SizedBox(
-                    width: 150,
+                  ConstrainedBox(
+                    constraints: BoxConstraints(maxWidth: constraints.maxWidth * .36),
                     child: Text(
                       "+ LKR${formatCurrencyAmount(amount)}",
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                       style: const TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.bold,
@@ -117,9 +121,8 @@ class IncomeCard extends StatelessWidget {
                 ],
               ),
             ],
-          ),
-        ],
-      ),
+          );
+      }),
     );
   }
   

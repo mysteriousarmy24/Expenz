@@ -2,7 +2,7 @@ import 'package:expenz/utilities/colors.dart';
 import 'package:expenz/utilities/number_formatter.dart';
 import 'package:flutter/material.dart';
 
-class CategoryChartCard extends StatefulWidget {
+class CategoryChartCard extends StatelessWidget {
   final String title;
   final Color progressColor;
   final double amount;
@@ -18,74 +18,36 @@ class CategoryChartCard extends StatefulWidget {
   });
 
   @override
-  State<CategoryChartCard> createState() => _CategoryChartCardState();
-}
-
-class _CategoryChartCardState extends State<CategoryChartCard> {
-  @override
   Widget build(BuildContext context) {
-    double progressWidth = widget.total!=0?MediaQuery.of(context).size.width*(widget.amount/widget.total):0;
+    final progress = total > 0 ? (amount / total).clamp(0.0, 1.0).toDouble() : 0.0;
     return Container(
-      margin: EdgeInsets.only(bottom: 10),
-      height: MediaQuery.of(context).size.height*0.11,
+      margin: const EdgeInsets.only(bottom: 10),
       decoration: BoxDecoration(
         borderRadius:BorderRadius.circular(20),
         color: kWhite ,
         
       ),child: Padding(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               children: [
-                Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(100),
-                    color: widget.progressColor.withOpacity(0.3)
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      children: [
-                        Container(
-                          height: 15,
-                          width: 15,
-                          decoration: BoxDecoration(
-                            color:widget.progressColor,
-                            borderRadius: BorderRadius.circular(100)
-                          ),
-                        ),
-                        SizedBox(width: 5,),
-                        Text(widget.title,style: TextStyle(
-                          fontSize: 12,fontWeight: FontWeight.w600
-                        ),),
-                      ],
-                    ),
-                  ),
-                ),
-                SizedBox(width: 10,),
-                Text("${(widget.amount/widget.total *100).toStringAsFixed(2)}%",style: TextStyle(
-                          fontSize: 12,fontWeight: FontWeight.w600,color: kGrey.withOpacity(0.8)
-                        ),),
-                Spacer(),
-                Text("LKR ${formatCurrencyAmount(widget.amount)}",style: TextStyle(
-                  color:widget.isExpense? kRed:kGreen,
-                  fontSize: 16
-                ),)
+                Container(width: 12, height: 12, decoration: BoxDecoration(color: progressColor, shape: BoxShape.circle)),
+                const SizedBox(width: 8),
+                Expanded(child: Text(title, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600))),
+                const SizedBox(width: 8),
+                Flexible(child: Text('LKR ${formatCurrencyAmount(amount)}', maxLines: 1, overflow: TextOverflow.ellipsis, textAlign: TextAlign.end, style: TextStyle(color: isExpense ? kRed : kGreen, fontSize: 15, fontWeight: FontWeight.w600)))
         
               ],
             ),
-            SizedBox(height: 10,),
-            //progress bar
-            Container(
-              height: 10,
-              width:progressWidth ,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(100),
-                color: widget.progressColor
-              ),
-            )
+            const SizedBox(height: 10),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(100),
+              child: LinearProgressIndicator(value: progress, minHeight: 10, color: progressColor, backgroundColor: progressColor.withOpacity(.18)),
+            ),
+            const SizedBox(height: 6),
+            Text('${(progress * 100).toStringAsFixed(2)}%', style: TextStyle(fontSize: 12, color: kGrey.withOpacity(.8))),
           ],
         ),
       ),

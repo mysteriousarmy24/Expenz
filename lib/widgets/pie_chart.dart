@@ -6,17 +6,12 @@ import 'package:fl_chart/fl_chart.dart';
 
 import 'package:flutter/material.dart';
 
-class Chart extends StatefulWidget {
+class Chart extends StatelessWidget {
   final Map<ExpenseCategory,double>expenseTotal;
   final Map<IncomeCategory,double>incomeTotal;
    final bool isIncome;
   const Chart({super.key,required this.expenseTotal,required this.incomeTotal, required this.isIncome});
 
-  @override
-  State<Chart> createState() => _ChartState();
-}
-
-class _ChartState extends State<Chart> {
   //sectiondata
   List<PieChartSectionData>getChartSection(){
 
@@ -24,72 +19,72 @@ class _ChartState extends State<Chart> {
 
     
 
-    if(widget.isIncome){
+    if(isIncome){
       return[
         PieChartSectionData(
           color: expenseCategoryColors[ExpenseCategory.food],
           radius: 60,
           showTitle: false,
-          value: widget.expenseTotal[ExpenseCategory.food]??0
+          value: expenseTotal[ExpenseCategory.food]??0
         ),
         PieChartSectionData(
           color: expenseCategoryColors[ExpenseCategory.transport],
           radius: 60,
           showTitle: false,
-          value: widget.expenseTotal[ExpenseCategory.transport]??0
+          value: expenseTotal[ExpenseCategory.transport]??0
         ),
         PieChartSectionData(
           color: expenseCategoryColors[ExpenseCategory.subscription],
           radius: 60,
           showTitle: false,
-          value: widget.expenseTotal[ExpenseCategory.subscription]??0
+          value: expenseTotal[ExpenseCategory.subscription]??0
         ),
         PieChartSectionData(
           color: expenseCategoryColors[ExpenseCategory.shopping],
           radius: 60,
           showTitle: false,
-          value: widget.expenseTotal[ExpenseCategory.shopping]??0
+          value: expenseTotal[ExpenseCategory.shopping]??0
         ),
         PieChartSectionData(
           color: expenseCategoryColors[ExpenseCategory.health],
           radius: 60,
           showTitle: false,
-          value: widget.expenseTotal[ExpenseCategory.health]??0
+          value: expenseTotal[ExpenseCategory.health]??0
         ),
         PieChartSectionData(
           color: expenseCategoryColors[ExpenseCategory.others],
           radius: 60,
           showTitle: false,
-          value: widget.expenseTotal[ExpenseCategory.others]??0
+          value: expenseTotal[ExpenseCategory.others]??0
         ),
       ];
     }else{
       return[
         PieChartSectionData(
           color: incomeCategoryColors[IncomeCategory.freelance],
-          value: widget.incomeTotal[IncomeCategory.freelance]??0,
+          value: incomeTotal[IncomeCategory.freelance]??0,
           radius: 60,
           showTitle: false
         ),
         PieChartSectionData(
           color: incomeCategoryColors[IncomeCategory.passive],
-          value: widget.incomeTotal[IncomeCategory.passive]??0,
+          value: incomeTotal[IncomeCategory.passive]??0,
           radius: 60,
           showTitle: false
         ),PieChartSectionData(
           color: incomeCategoryColors[IncomeCategory.salary],
-          value: widget.incomeTotal[IncomeCategory.salary]??0,
+          value: incomeTotal[IncomeCategory.salary]??0,
           radius: 60,
           showTitle: false
         ),PieChartSectionData(
           color: incomeCategoryColors[IncomeCategory.sales],
-          value: widget.incomeTotal[IncomeCategory.sales]??0,
+          value: incomeTotal[IncomeCategory.sales]??0,
           radius: 60,
           showTitle: false
         ),
         PieChartSectionData(
           color: incomeCategoryColors[IncomeCategory.others],
-          value: widget.incomeTotal[IncomeCategory.others]??0,
+          value: incomeTotal[IncomeCategory.others]??0,
           radius: 60,
           showTitle: false
         ),
@@ -105,9 +100,13 @@ class _ChartState extends State<Chart> {
       startDegreeOffset: -90,
       borderData: FlBorderData(show: false)
     );
-    return (widget.isIncome &&widget.incomeTotal.isEmpty)||(!widget.isIncome &&widget.expenseTotal.isEmpty)?Center(child: Text("Plaese add Expenses/incomes..."),): Container(
-      width: 250,
-      height: 250,
+    final total = isIncome ? expenseTotal.values.fold(0.0, (sum, value) => sum + value) : incomeTotal.values.fold(0.0, (sum, value) => sum + value);
+    if (total <= 0) return const Center(child: Text('Please add expenses or incomes.'));
+    return LayoutBuilder(builder: (context, constraints) {
+      final size = constraints.maxWidth.clamp(180.0, 280.0).toDouble();
+      return Container(
+      width: size,
+      height: size,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
         color: kWhite
@@ -124,15 +123,15 @@ class _ChartState extends State<Chart> {
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              widget.isIncome? Center(
-                child: Text("LKR\n${formatCurrencyAmount(widget.expenseTotal.values.fold(0.0, (sum, item) => sum + item))}",style: TextStyle(
-                  fontSize: 25,
+              isIncome ? Center(
+                child: Text("LKR\n${formatCurrencyAmount(total)}", textAlign: TextAlign.center, maxLines: 2, overflow: TextOverflow.ellipsis, style: TextStyle(
+                  fontSize: size * .1,
                   fontWeight: FontWeight.bold
                 ),),
               )
               :Center(
-                child: Text("LKR\n${formatCurrencyAmount(widget.incomeTotal.values.fold(0.0, (sum, item) => sum + item))}",style: TextStyle(
-                  fontSize: 25,
+                child: Text("LKR\n${formatCurrencyAmount(total)}", textAlign: TextAlign.center, maxLines: 2, overflow: TextOverflow.ellipsis, style: TextStyle(
+                  fontSize: size * .1,
                   fontWeight: FontWeight.bold
                 ),),
               )
@@ -142,6 +141,7 @@ class _ChartState extends State<Chart> {
         ],
       ),
     );
+    });
   }
 }
 //values.fold(0.0, (sum,element)=>sum+element)

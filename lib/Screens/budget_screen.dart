@@ -3,6 +3,7 @@ import 'package:expenz/models/income_category_model.dart';
 import 'package:expenz/utilities/colors.dart';
 import 'package:expenz/widgets/category_chart_card.dart';
 import 'package:expenz/widgets/pie_chart.dart';
+import 'package:expenz/utilities/responsive.dart';
 import 'package:flutter/material.dart';
 
 class BudgetScreen extends StatefulWidget {
@@ -49,7 +50,7 @@ class _BudgetScreenState extends State<BudgetScreen> {
             children: [
               SizedBox(height: 20),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                padding: EdgeInsets.symmetric(horizontal: context.horizontalPadding),
                 child: Container(
                   decoration: BoxDecoration(
                     boxShadow: [
@@ -61,19 +62,18 @@ class _BudgetScreenState extends State<BudgetScreen> {
                     color: Color(0xFFF1F1FA),
                     borderRadius: BorderRadius.circular(100),
                   ),
-                  height: MediaQuery.of(context).size.height * 0.08,
                   child: Padding(
                     padding: const EdgeInsets.all(5),
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        GestureDetector(
+                        Expanded(child: GestureDetector(
                           onTap: () {
                             setState(() {
                               _selectedMethod = 0;
                             });
                           },
                           child: Container(
+                            alignment: Alignment.center,
                             decoration: BoxDecoration(
                               color: _selectedMethod == 0
                                   ? kRed
@@ -81,12 +81,12 @@ class _BudgetScreenState extends State<BudgetScreen> {
                               borderRadius: BorderRadius.circular(100),
                             ),
                             child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 40,
-                                vertical: 15,
-                              ),
+                              padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 8),
                               child: Text(
                                 "Expenses",
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                textAlign: TextAlign.center,
                                 style: TextStyle(
                                   fontWeight: FontWeight.w500,
                                   fontSize: 20,
@@ -97,14 +97,15 @@ class _BudgetScreenState extends State<BudgetScreen> {
                               ),
                             ),
                           ),
-                        ),
-                        GestureDetector(
+                        )),
+                        Expanded(child: GestureDetector(
                           onTap: () {
                             setState(() {
                               _selectedMethod = 1;
                             });
                           },
                           child: Container(
+                            alignment: Alignment.center,
                             decoration: BoxDecoration(
                               color: _selectedMethod == 1
                                   ? kGreen
@@ -112,12 +113,12 @@ class _BudgetScreenState extends State<BudgetScreen> {
                               borderRadius: BorderRadius.circular(100),
                             ),
                             child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 33,
-                                vertical: 15,
-                              ),
+                              padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 8),
                               child: Text(
                                 "Incomes",
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                textAlign: TextAlign.center,
                                 style: TextStyle(
                                   fontWeight: FontWeight.w500,
                                   fontSize: 20,
@@ -128,7 +129,7 @@ class _BudgetScreenState extends State<BudgetScreen> {
                               ),
                             ),
                           ),
-                        ),
+                        )),
                       ],
                     ),
                   ),
@@ -142,11 +143,11 @@ class _BudgetScreenState extends State<BudgetScreen> {
               ),
               SizedBox(height: 20),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                child: SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.35,
-                  child: ListView.builder(
+                padding: EdgeInsets.symmetric(horizontal: context.horizontalPadding),
+                child: ListView.builder(
                     shrinkWrap: true,
+                    primary: false,
+                    physics: const NeverScrollableScrollPhysics(),
                     itemCount: data.length,
                     itemBuilder: (context, index) {
                       final category = data.keys.toList()[index];
@@ -163,7 +164,6 @@ class _BudgetScreenState extends State<BudgetScreen> {
                       );
                     },
                   ),
-                ),
               ),
             ],
           ),

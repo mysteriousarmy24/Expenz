@@ -1,16 +1,30 @@
-# expenz
+# Expenz
 
-A new Flutter project.
+Expenz is a Flutter personal-finance app for tracking income, expenses, and category budgets.
 
-## Getting Started
+## Download the app
 
-This project is a starting point for a Flutter application.
+Download the latest Android APK from the [GitHub Releases page](https://github.com/mysteriousarmy24/Expenz/releases/latest).
 
-A few resources to get you started if this is your first Flutter project:
+> Android may prompt you to allow installation from this source. Only install APKs downloaded from this repository's releases.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+## Latest update
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- Refreshed the UI for responsive use across mobile screen sizes.
+- Added safe layouts for long transaction names, category labels, and large currency values.
+- Improved scrolling, adaptive padding, and chart/card constraints to prevent overflow and clipping.
+
+## Run locally
+
+```bash
+flutter pub get
+flutter run
+```
+
+## Build a release APK
+
+```bash
+flutter build apk --release
+```
+
+The generated APK is available at `build/app/outputs/flutter-apk/app-release.apk`.

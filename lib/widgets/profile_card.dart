@@ -49,14 +49,17 @@ class ProfileCard extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 10),
-          Text(
+          Expanded(
+            child: Text(
             title,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
             style: TextStyle(
               color: kBlack.withOpacity(0.6),
               fontSize: 18,
               fontWeight: FontWeight.w600,
             ),
-          ),
+          )),
         ],
       ),
     );
